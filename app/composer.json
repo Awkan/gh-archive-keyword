@@ -17,6 +17,7 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpstan/phpstan": "^0.12.28",
         "phpstan/phpstan-doctrine": "^0.12.14",
+        "symfony/debug-pack": "^1.0",
         "symfony/test-pack": "^1.0"
     },
     "config": {
