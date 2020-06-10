@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+    nginx:
+        build: docker/nginx
+        # TODO : Deploy image to registry and use it
+        # image: $DOCKER_IMAGE_NGINX
+        ports:
+            - ${NGINX_PORT}:8080
+        volumes:
+            - ./docker/nginx/default:/etc/nginx/sites-available/default:ro
+            - ./app:/var/www/gh-archive-keyword/:delegated
+        depends_on:
+            - php
+
+    php:
+        build: docker/php
+        # TODO : Deploy image to registry and use it
+        # image: $DOCKER_IMAGE_PHP
+        ports:
+            - ${PHP_FPM_PORT}:9000
+        volumes:
+            - ./docker/php/fpm-pool.conf:/etc/php/7.4/fpm/pool.d/www.conf:ro
+            - ./app:/var/www/gh-archive-keyword/:delegated
+        depends_on:
+            - db
+
+    db:
+        image: postgres:13
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: dbpass
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - ${ADMINER_PORT}:8080
