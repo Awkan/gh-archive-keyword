@@ -5,6 +5,7 @@ GH Archive Keyword
 
 - Docker
 - Docker compose
+- Make
 
 ## Installation
 
@@ -18,3 +19,12 @@ cp .env.dist .env
 
 These env files should already work since default values are development values.
 However you can edit them in order to make value match with your own. 
+
+- **Initialize project to start development**
+
+The manipulation is simple since a Make script is available
+```bash
+make initialize
+```
+
+Your project must be started and you're now ready to dev ! :computer:
