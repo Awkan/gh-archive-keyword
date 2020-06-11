@@ -51,21 +51,18 @@ pullImages: ## Pull Docker images
 ## —— App installation ——————————————————————————————————————————————————————————————————
 
 install: ## Install app thanks to Docker
-install: installVendors
+install: installVendors resetDatabase
 
 installVendors: ## Install app vendors
 	$(COMPOSER) install
 
 resetDatabase: ## Delete and re-create clean database
-	$(EXEC_PHP_ROOT) bash -c 'until nc -z mysql 3306; do sleep 1; echo "Waiting for DB to come up..."; done'
-	$(SYMFONY) doctrine:database:drop --force
+	$(EXEC_PHP_ROOT) bash -c 'until nc -z db 5432; do sleep 1; echo "Waiting for DB to come up..."; done'
 	$(SYMFONY) doctrine:database:create --if-not-exists
+	$(SYMFONY) doctrine:schema:drop --force
 	$(SYMFONY) doctrine:migrations:migrate --no-interaction
 
-populateDatabase: ## Populate database by loading fixtures
-	$(SYMFONY) doctrine:fixtures:load --no-interaction
-
-.PHONY = install installVendors resetDatabase populateDatabase
+.PHONY = install installVendors resetDatabase
 
 ## —— Quality Assurance —————————————————————————————————————————————————————————————————
 

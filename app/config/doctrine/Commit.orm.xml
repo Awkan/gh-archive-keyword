@@ -9,8 +9,9 @@
 
         <id name="id" column="id" type="uuid"/>
 
-        <field name="sha" column="sha" nullable="true" />
-        <field name="message" column="message" nullable="true" />
+        <field name="sha" column="sha" />
+        <field name="message" column="message" type="text" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" nullable="true" />
 
     </entity>
 
