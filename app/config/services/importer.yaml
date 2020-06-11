@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Importer\:
+        resource: '../../src/Importer/*'
+
+# TODO : Check why instanceof does not works ...
+# TMP Fix is to tag service manualy instead ...
+#    _instanceof:
+#        App\Importer\DataMapper\MapperItemInterface:
+#            tags: ['app.importer.data_mapper.restricted']
+
+    App\Importer\DataMapper\CommitMapper:
+        tags: ['app.importer.data_mapper.restricted']
+    
+    App\Importer\DataMapper\ChainMapper:
+        arguments:
+            $mappers: !tagged_iterator app.importer.data_mapper.restricted

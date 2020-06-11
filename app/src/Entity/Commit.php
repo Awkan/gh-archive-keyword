@@ -12,12 +12,14 @@ class Commit
     private UuidInterface $id;
     private ?string $sha;
     private ?string $message;
+    private ?\DateTimeImmutable $createdAt;
 
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->sha = null;
         $this->message = null;
+        $this->createdAt = null;
     }
 
     public function getId(): UuidInterface
@@ -43,5 +45,15 @@ class Commit
     public function setMessage(?string $message): void
     {
         $this->message = $message;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 }

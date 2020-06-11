@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Command\:
+        resource: '../../src/Command/*'
+    
+    App\Command\ImportArchiveCommand:
+        arguments:
+            $mapper: '@App\Importer\DataMapper\ChainMapper'
