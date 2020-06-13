@@ -1,0 +1,3 @@
+dashboard_index:
+    path: '/'
+    controller: 'App\Controller\Dashboard\IndexController'

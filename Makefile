@@ -64,6 +64,21 @@ resetDatabase: ## Delete and re-create clean database
 
 .PHONY = install installVendors resetDatabase
 
+## —— Test ——————————————————————————————————————————————————————————————————————————————
+
+tests: ## Run all tests
+tests: unitTests functionalTests
+
+unitTests: ## Run unit tests
+	$(EXEC_PHP_NATIVE) ./vendor/bin/simple-phpunit
+
+functionalTests: ## Run functional tests
+functionalTests: initialize
+	$(EXEC_PHP) bash -c "APP_ENV=test ./vendor/bin/behat"
+
+.PHONY = tests unitTests functionalTests
+
+
 ## —— Quality Assurance —————————————————————————————————————————————————————————————————
 
 lint: ## Lint files

@@ -1,0 +1,3 @@
+_dashboard:
+    resource: 'app/dashboard.yaml'
+    prefix: /dashboard
