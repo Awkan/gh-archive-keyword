@@ -18,9 +18,9 @@ class CommitMapperTest extends TestCase
     {
         $this->sut = new CommitMapper();
     }
-    
+
     /**
-     * Test class inheritence
+     * Test class inheritence.
      */
     public function testInheritence(): void
     {
@@ -67,9 +67,8 @@ class CommitMapperTest extends TestCase
         $this->assertEquals($contextImportDate, $emptiestResult->getCreatedAt());
     }
 
-
     /**
-     * Test supports
+     * Test supports.
      */
     public function testSupports(): void
     {
@@ -105,8 +104,8 @@ class CommitMapperTest extends TestCase
 
     /**
      * Test supports
-     * Provided data are not supported
-     * 
+     * Provided data are not supported.
+     *
      * @dataProvider dataProviderNotSupports
      */
     public function testNotSupports($data, $type): void

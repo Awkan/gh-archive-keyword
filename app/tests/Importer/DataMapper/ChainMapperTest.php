@@ -31,9 +31,9 @@ class ChainMapperTest extends TestCase
             $this->mapper2Prophecy->reveal(),
         ]);
     }
-    
+
     /**
-     * Test class inheritence
+     * Test class inheritence.
      */
     public function testInheritence(): void
     {
@@ -42,7 +42,7 @@ class ChainMapperTest extends TestCase
 
     /**
      * Test map
-     * Since first `mappers` supports, we only use him and not the other(s)
+     * Since first `mappers` supports, we only use him and not the other(s).
      */
     public function testMapOnFirstMapper(): void
     {
@@ -50,7 +50,7 @@ class ChainMapperTest extends TestCase
         $type = 'dummy-type';
         $mapper1supports = true;
         $mapper1mapping = 'dummy-object';
-        
+
         // First mapper supports...
         $this->mapper1Prophecy->supports($data, $type)->shouldBeCalled()->willReturn($mapper1supports);
         $this->mapper1Prophecy->map($data, $type, Argument::type('array'))->shouldBeCalled()->willReturn($mapper1mapping);
@@ -67,7 +67,7 @@ class ChainMapperTest extends TestCase
 
     /**
      * Test map
-     * Since first `mappers` not supports data, we try to use another
+     * Since first `mappers` not supports data, we try to use another.
      */
     public function testMapOnOtherMapper(): void
     {
@@ -76,7 +76,7 @@ class ChainMapperTest extends TestCase
         $mapper1supports = false;
         $mapper2supports = true;
         $mapper2mapping = 'dummy-object';
-        
+
         // First mapper not supports...
         $this->mapper1Prophecy->supports($data, $type)->shouldBeCalled()->willReturn($mapper1supports);
         $this->mapper1Prophecy->map(Argument::cetera())->shouldNotBeCalled();
@@ -91,9 +91,9 @@ class ChainMapperTest extends TestCase
         );
     }
 
-        /**
+    /**
      * Test map
-     * No mapper supports data
+     * No mapper supports data.
      */
     public function testMapWhenNoMappersSupportData(): void
     {
@@ -101,7 +101,7 @@ class ChainMapperTest extends TestCase
 
         $data = '{"dummy": "json"}';
         $type = 'dummy-type';
-        
+
         $this->mapper1Prophecy->supports($data, $type)->shouldBeCalled()->willReturn(false);
         $this->mapper2Prophecy->supports($data, $type)->shouldBeCalled()->willReturn(false);
 

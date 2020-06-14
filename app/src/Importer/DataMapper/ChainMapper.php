@@ -11,19 +11,24 @@ class ChainMapper implements MapperInterface
     /** @var MapperItemInterface[] */
     private array $mappers;
 
+    /**
+     * Constructor.
+     *
+     * @param iterable<MapperItemInterface> $mappers
+     */
     public function __construct(iterable $mappers)
     {
-        foreach($mappers as $mapper) {
+        foreach ($mappers as $mapper) {
             $this->addMapper($mapper);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function map($data, string $type, array $context = [])
     {
-        foreach($this->mappers as $mapper) {
+        foreach ($this->mappers as $mapper) {
             if (false === $mapper->supports($data, $type)) {
                 continue;
             }
@@ -35,7 +40,7 @@ class ChainMapper implements MapperInterface
     }
 
     /**
-     * Add a mapper to the chain
+     * Add a mapper to the chain.
      */
     private function addMapper(MapperItemInterface $mapper): void
     {

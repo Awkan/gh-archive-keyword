@@ -17,9 +17,10 @@ class CommitRepository extends ServiceEntityRepository
     }
 
     /**
-     * Count commits by criteria
-     * 
-     * @param array $criteria Criteria to apply to filter results
+     * Count commits by criteria.
+     *
+     * @param mixed[] $criteria Criteria to apply to filter results
+     *
      * @return int The number of rows count
      */
     public function countBy(array $criteria): int
@@ -27,7 +28,7 @@ class CommitRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('o');
 
         $qb->select('count(o.id)');
-        foreach($criteria as $key => $value) {
+        foreach ($criteria as $key => $value) {
             $this->addCriterion($qb, $key, $value);
         }
 
@@ -35,12 +36,13 @@ class CommitRepository extends ServiceEntityRepository
     }
 
     /**
-     * Add a query criterion
-     * 
-     * @param string $key The key concerned by criterion
-     * @param mixed $criterion The value to filter with
+     * Add a query criterion.
+     *
+     * @param QueryBuilder $qb    The query builder on which apply filter
+     * @param string       $key   The key concerned by criterion
+     * @param mixed        $value The value to filter with
      */
-    private function addCriterion(QueryBuilder $qb, $key, $value): void
+    private function addCriterion(QueryBuilder $qb, string $key, $value): void
     {
         // No criteria yet
     }

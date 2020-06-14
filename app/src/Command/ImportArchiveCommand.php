@@ -79,7 +79,7 @@ class ImportArchiveCommand extends Command
         $dataset = \gzfile(self::GH_ARCHIVE_BASE_URI . $dateString . '-' . $hour . '.json.gz');
         $importDate = $date->setTime($hour, 0);
 
-        foreach($dataset as $line => $item) {
+        foreach ($dataset as $line => $item) {
             // Decode JSON into array
             // TODO : Check why some lines can't be decoded, in order to remove this try catch
             try {
@@ -109,13 +109,13 @@ class ImportArchiveCommand extends Command
                 );
                 $mappedData = \is_iterable($mappedData) ? $mappedData : [$mappedData];
 
-                foreach($mappedData as $item) {
+                foreach ($mappedData as $item) {
                     // Warning : We didn't have check if items are already in database.
                     // This would be a nice feature, to avoid duplicate data or unique constraint violation ;-)
                     $this->entityManager->persist($item);
                 }
 
-            $this->entityManager->flush();
+                $this->entityManager->flush();
             } catch (MapperNotFoundException $e) {
                 // We don't want to raise error if no mapper was found
                 // If no mapper was found, then we don't want to import the data

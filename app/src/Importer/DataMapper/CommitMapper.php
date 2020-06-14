@@ -9,7 +9,9 @@ use App\Entity\Commit;
 class CommitMapper implements MapperItemInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
+     * @return Commit[]
      */
     public function map($data, string $type, array $context = []): array
     {
@@ -17,8 +19,8 @@ class CommitMapper implements MapperItemInterface
         $createdAt = $context[self::CONTEXT_IMPORT_DATE] ?? null;
 
         $objects = [];
-        
-        foreach($commitsToMap as $item) {
+
+        foreach ($commitsToMap as $item) {
             // TODO : create object via __construct or Commit::createFromArchive($sha, $message)
             $commit = new Commit();
             $commit->setSha($item['sha'] ?? null);
@@ -31,7 +33,7 @@ class CommitMapper implements MapperItemInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($data, string $type): bool
     {
