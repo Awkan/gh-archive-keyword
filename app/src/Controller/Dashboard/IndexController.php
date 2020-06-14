@@ -23,10 +23,12 @@ class IndexController extends AbstractController
 
     public function __invoke(): JsonResponse
     {
-        $criteria = $this->requestExtractor->getQueryParams();
+        $queryParams = $this->requestExtractor->getQueryParams();
+
+        // TODO : Verify that queryParams are valid (e.g. Date format) @see https://github.com/Awkan/gh-archive-keyword/issues/9
 
         $dto = new DashboardDTO();
-        $dto->setNbCommits($this->commitRepository->countBy($criteria));
+        $dto->setNbCommits($this->commitRepository->countBy($queryParams));
 
         return $this->json($dto);
     }
