@@ -44,6 +44,12 @@ class CommitRepository extends ServiceEntityRepository
      */
     private function addCriterion(QueryBuilder $qb, string $key, $value): void
     {
-        // No criteria yet
+        switch ($key) {
+            case 'keyword':
+                $qb->andWhere($qb->expr()->like('o.message', ':' . $key . '_value'));
+                $qb->setParameter($key . '_value', '%' . $value . '%');
+
+                return;
+        }
     }
 }
