@@ -17,6 +17,7 @@ class RequestExtractor
 
     /**
      * Get every query params contained in master request.
+     *
      * @return string[]
      */
     public function getQueryParams(): array

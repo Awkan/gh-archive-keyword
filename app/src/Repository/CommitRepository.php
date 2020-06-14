@@ -45,11 +45,24 @@ class CommitRepository extends ServiceEntityRepository
     private function addCriterion(QueryBuilder $qb, string $key, $value): void
     {
         switch ($key) {
+            case 'date':
+                // For the moment, we got a YYYY-MM-DD date in string format, then deal with it
+                $date = \DateTimeImmutable::createFromFormat('Y-m-d', $value);
+                if (false === $date) {
+                    throw new \RuntimeException('Date filter has not the right format. Maybe the data validation was not made (issue #9) ?');
+                }
+                $dateFrom = $date->setTime(0, 0);
+                $dateTo = $dateFrom->add(\DateInterval::createFromDateString('+1 day'));
+
+                $qb->andWhere($qb->expr()->gte('o.createdAt', ':' . $key . '_from_value'));
+                $qb->andWhere($qb->expr()->lt('o.createdAt', ':' . $key . '_to_value'));
+                $qb->setParameter($key . '_from_value', $dateFrom);
+                $qb->setParameter($key . '_to_value', $dateTo);
+                break;
             case 'keyword':
                 $qb->andWhere($qb->expr()->like('o.message', ':' . $key . '_value'));
                 $qb->setParameter($key . '_value', '%' . $value . '%');
-
-                return;
+                break;
         }
     }
 }
