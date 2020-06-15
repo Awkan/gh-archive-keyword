@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Importer\DataMapper;
+namespace App\Tests\Import\Mapper;
 
 use App\Exception\MapperNotFoundException;
-use App\Importer\DataMapper\ChainMapper;
-use App\Importer\DataMapper\MapperInterface;
-use App\Importer\DataMapper\MapperItemInterface;
+use App\Import\Mapper\ChainMapper;
+use App\Import\Mapper\MapperInterface;
+use App\Import\Mapper\MapperItemInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;

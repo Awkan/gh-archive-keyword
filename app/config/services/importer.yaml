@@ -3,13 +3,13 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Importer\:
-        resource: '../../src/Importer/*'
+    App\Import\:
+        resource: '../../src/Import/*'
 
     _instanceof:
-        App\Importer\DataMapper\MapperItemInterface:
+        App\Import\Mapper\RestrictedMapperInterface:
             tags: ['app.importer.data_mapper.restricted']
 
-    App\Importer\DataMapper\ChainMapper:
+    App\Import\Mapper\ChainMapper:
         arguments:
             $mappers: !tagged_iterator app.importer.data_mapper.restricted

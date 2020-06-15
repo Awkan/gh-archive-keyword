@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Importer\DataMapper;
+namespace App\Tests\Import\Mapper;
 
 use App\Entity\Commit;
-use App\Importer\DataMapper\CommitMapper;
-use App\Importer\DataMapper\MapperInterface;
-use App\Importer\DataMapper\MapperItemInterface;
+use App\Import\Mapper\Item\CommitMapper;
+use App\Import\Mapper\MapperInterface;
+use App\Import\Mapper\MapperItemInterface;
 use PHPUnit\Framework\TestCase;
 
 class CommitMapperTest extends TestCase

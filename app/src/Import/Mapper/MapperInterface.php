@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Importer\DataMapper;
+namespace App\Import\Mapper;
 
 interface MapperInterface
 {

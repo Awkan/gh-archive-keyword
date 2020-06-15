@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Importer\DataMapper;
+namespace App\Import\Mapper\Item;
 
 use App\Entity\Commit;
+use App\Import\Mapper\MapperInterface;
+use App\Import\Mapper\MapperItemInterface;
 
 class CommitMapper implements MapperItemInterface
 {
     /**
      * {@inheritdoc}
+     * Map data in order to create commit(s) objet(s).
      *
      * @return Commit[]
      */
@@ -21,12 +24,11 @@ class CommitMapper implements MapperItemInterface
         $objects = [];
 
         foreach ($commitsToMap as $item) {
-            // TODO : create object via __construct or Commit::createFromArchive($sha, $message)
-            $commit = new Commit();
-            $commit->setSha($item['sha'] ?? null);
-            $commit->setMessage($item['message'] ?? null);
-            $commit->setCreatedAt($createdAt);
-            $objects[] = $commit;
+            $objects[] = new Commit(
+                $item['sha'] ?? null,
+                $item['message'] ?? null,
+                $createdAt
+            );
         }
 
         return $objects;
