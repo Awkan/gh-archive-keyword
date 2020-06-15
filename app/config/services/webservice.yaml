@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Webservice\:
+        resource: '../../src/Webservice/*'
+
+    App\Webservice\Provider\GHArchiveProvider:
+        arguments:
+            $reader: '@App\Utils\Reader\GzReader'
