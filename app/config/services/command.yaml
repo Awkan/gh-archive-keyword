@@ -8,4 +8,4 @@ services:
     
     App\Command\ImportArchiveCommand:
         arguments:
-            $mapper: '@App\Importer\DataMapper\ChainMapper'
+            $mapper: '@App\Import\Mapper\ChainMapper'
