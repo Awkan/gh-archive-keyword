@@ -9,7 +9,7 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Command,DependencyInjection,Entity,Import,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Command,DependencyInjection,Entity,Import,Migrations,Tests,Utils,Webservice,Kernel.php}'
 
     App\Controller\:
         resource: '../src/Controller'
@@ -18,3 +18,5 @@ services:
 imports:
     - { resource: 'services/command.yaml' }
     - { resource: 'services/importer.yaml' }
+    - { resource: 'services/utils.yaml' }
+    - { resource: 'services/webservice.yaml' }

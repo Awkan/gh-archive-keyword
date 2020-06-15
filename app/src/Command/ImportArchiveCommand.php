@@ -6,6 +6,7 @@ namespace App\Command;
 
 use App\Exception\MapperNotFoundException;
 use App\Import\Mapper\MapperInterface;
+use App\Webservice\Provider\GHArchiveProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -20,18 +21,19 @@ class ImportArchiveCommand extends Command
 {
     protected static $defaultName = 'app:import:archive';
 
-    private const GH_ARCHIVE_BASE_URI = 'https://data.gharchive.org/';
-
     private DecoderInterface $decoder;
+    private GHArchiveProvider $provider;
     private MapperInterface $mapper;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
         DecoderInterface $decoder,
+        GHArchiveProvider $provider,
         MapperInterface $mapper,
         EntityManagerInterface $entityManager
     ) {
         $this->decoder = $decoder;
+        $this->provider = $provider;
         $this->mapper = $mapper;
         $this->entityManager = $entityManager;
 
@@ -64,7 +66,7 @@ class ImportArchiveCommand extends Command
         $dateString = $input->getArgument('date');
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $dateString);
 
-        $style->section('Import GT Archive');
+        $style->title('Import GT Archive');
 
         // Check param validity
         // If datetime is false, then $date is not a valid date
@@ -72,21 +74,38 @@ class ImportArchiveCommand extends Command
             throw new InvalidArgumentException($date . ' is not a valid date. Abort.');
         }
 
-        $style->writeln('Begin importing for date : ' . $dateString);
+        $style->writeln('Begin import for date : ' . $dateString);
 
+        $nbSuccess = 0;
+        $nbDecodingError = 0;
+        $nbNoType = 0;
+        $nbNoMapper = 0;
+
+        $style->newLine();
+        $style->write('Fetching data to GHArchive ... ');
         // TODO : export the whole day by loop on $hour from 0 to 23 (+ concurrency ?)
-        $hour = 15;
-        $dataset = \gzfile(self::GH_ARCHIVE_BASE_URI . $dateString . '-' . $hour . '.json.gz');
-        $importDate = $date->setTime($hour, 0);
+        // Only use hour 15 for the moment
+        $importDate = $date->setTime(15, 00);
+        $dataset = $this->provider->fetch(
+            $importDate->format('Y'),
+            $importDate->format('m'),
+            $importDate->format('d'),
+            $importDate->format('H')
+        );
+        $style->writeLn('OK');
+        $style->newLine();
 
-        foreach ($dataset as $line => $item) {
+        $style->progressStart(\count($dataset));
+
+        foreach ($dataset as $item) {
+            $style->progressAdvance();
+
             // Decode JSON into array
-            // TODO : Check why some lines can't be decoded, in order to remove this try catch
+            // TODO : Check why some lines can't be decoded, in order to remove this "useless" try catch
             try {
                 $decodedItem = $this->decoder->decode($item, JsonEncoder::FORMAT);
             } catch (\Exception $e) {
-                // Skip not decodable data with warning output for the moment.
-                $style->warning('Cannot decode line ' . $line);
+                ++$nbDecodingError;
                 continue;
             }
 
@@ -94,7 +113,7 @@ class ImportArchiveCommand extends Command
             // Skip otherwise
             $type = $decodedItem['type'] ?? false;
             if (false === $type) {
-                $style->warning('Cannot import following data since there is no "type" defined : ' . $item);
+                ++$nbNoType;
                 continue;
             }
 
@@ -117,12 +136,25 @@ class ImportArchiveCommand extends Command
 
                 $this->entityManager->flush();
             } catch (MapperNotFoundException $e) {
-                // We don't want to raise error if no mapper was found
-                // If no mapper was found, then we don't want to import the data
+                // If no mapper was found, then we don't want to import the data & not raise an exception
+                ++$nbNoMapper;
             }
+
+            ++$nbSuccess;
         }
 
+        $style->progressFinish();
         $style->success('Data imported successfuly');
+
+        $style->table(
+            ['Rows import status', 'Number'],
+            [
+                ['SUCCESS', $nbSuccess],
+                ['SKIP - No mapper (not needed data)', $nbNoMapper],
+                ['ERROR - Cannot be decoded', $nbDecodingError],
+                ['ERROR - No event type defined', $nbNoType],
+            ]
+        );
 
         return Command::SUCCESS;
     }
